@@ -40,6 +40,13 @@ video_notes/
   lecture-to-document map
 ```
 
+## Notebook companion paper
+
+A short standalone paper documents the tutorial notebook's mathematical modules, reproducibility boundaries, non-claims, MMALS analogy, and trace-driven validation roadmap:
+
+- `docs/notebook_paper/Synthetic_Data_Scaling_Notebook_Companion.pdf`
+- `docs/notebook_paper/main.tex`
+
 ## Build
 
 ```bash

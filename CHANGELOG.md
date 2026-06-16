@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.0.2 - 2026-06-16
+
+- Added a standalone companion paper for `synthetic_data_scaling_tutorial.ipynb`.
+- Documented every notebook module, formula, claim status, reproducibility boundary, and limitation.
+- Distinguished executable calculations, formula-driven illustrations, conceptual simulations, and unvalidated MMALS hypotheses.
+- Added a trace-driven experimental roadmap for recursive-only, anchored, fresh-real, and verified-synthetic MMALS protocols.
+- Updated the repository README, manifest, version, and checksums.
+
 ## 1.0.1 - 2026-06-15
 
 - Released the fully English edition.
