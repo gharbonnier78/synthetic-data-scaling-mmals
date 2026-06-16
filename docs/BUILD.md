@@ -17,7 +17,7 @@ make
 This regenerates the figures and compiles:
 
 ```text
-Synthetic_Data_Age_MMALS_STRATQ.pdf
+Synthetic_Data_Age_MMALS_STRATQ_EN.pdf
 ```
 
 ## Manual build

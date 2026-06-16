@@ -7,7 +7,7 @@
 ./Makefile
 ./NOTICE.md
 ./README.md
-./Synthetic_Data_Age_MMALS_STRATQ.pdf
+./Synthetic_Data_Age_MMALS_STRATQ_EN.pdf
 ./VERSION
 ./code/generate_figures.py
 ./code/run_bibtex.sh
@@ -43,7 +43,7 @@
 ./paper/main.pdf
 ./paper/main.tex
 ./paper/references.bib
-./paper/sections/01_french_summary.tex
+./paper/sections/01_executive_summary.tex
 ./paper/sections/02_source_audience.tex
 ./paper/sections/03_twelve_year_old.tex
 ./paper/sections/04_engineer.tex

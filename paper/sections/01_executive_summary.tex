@@ -1,0 +1,107 @@
+\section{Executive summary}
+
+\subsection{Why this lecture matters}
+
+Julia Kempe's lecture asks a question that has become structural: what happens to scaling laws when the data used to train models no longer come only from humans, sensors, or natural phenomena, but also from previous models? Classical scaling laws suggest that, when model size, data, and compute are increased in a suitable balance, loss decreases according to a power law. This view has strongly influenced the industrial strategy of large-scale AI. Synthetic data changes the training distribution itself.
+
+The central risk is not merely a higher error rate. It is subtler:
+
+\begin{itemize}[leftmargin=*]
+  \item the long tail of rare cases may be cut off or narrowed;
+  \item some skills may stop receiving the examples required to maintain them;
+  \item slightly biased pseudo-labels may become the ground truth of the next generation;
+  \item additional data may then improve precision on an already impoverished distribution without bringing the system closer to reality;
+  \item mixtures of real and synthetic data may create plateaus and, in some regimes, delayed generalisation resembling \emph{grokking};
+  \item independent verification may transform a large set of imperfect candidates into a genuinely useful training dataset.
+\end{itemize}
+
+\begin{keyidea}
+Raw volume is not a measure of new information. One million correlated repetitions are not equivalent to one million independent observations. The relevant quantity becomes \emph{verified functional support}: the part of reality, the task distribution, or the skill set that remains accessible, represented, and independently checked.
+\end{keyidea}
+
+\subsection{The conceptual progression of the lecture}
+
+The lecture develops its argument through a sequence of increasingly realistic models.
+
+\paragraph{1. Scaling laws.} An error may decrease as
+\[
+E(T,d) \approx \left(\frac{T_c}{T}\right)^a + \left(\frac{d_c}{d}\right)^b,
+\]
+where $T$ is the amount of data and $d$ is model capacity. Whichever resource remains insufficient becomes the bottleneck.
+
+\paragraph{2. Emergent skills.} Some performances appear to arise abruptly with scale. One must nevertheless distinguish a genuine internal transition, a statistical exposure threshold, and an artefact caused by a discontinuous metric.
+
+\paragraph{3. Heavy-tailed distributions.} Language approximately follows Zipf's law: a few elements are frequent and many are rare. Difficulty, measured for example through perplexity, is also highly asymmetric.
+
+\paragraph{4. The Hutter model.} An infinite-memory system with no generalisation can already exhibit a scaling law. It answers correctly if an input has been observed before and abstains otherwise. For $p(i)\propto i^{-\beta}$, its error follows
+\[
+E_T \asymp T^{-(1-1/\beta)}.
+\]
+A clean scaling curve therefore proves neither reasoning nor abstraction.
+
+\paragraph{5. Tail cutting.} If a synthetic generator produces events only up to rank $k$, the error becomes
+\[
+E_{\mathrm{test}} \asymp T^{-(\beta-1)/\beta} + k^{-(\beta-1)}.
+\]
+The first term decreases with sample count; the second is an error floor produced by missing cases.
+
+\paragraph{6. Recursion.} Each synthetic generation adds its own sampling error, approximation error, and possibly label noise. A sequence of models may become increasingly consistent with its predecessors while becoming less accurate with respect to the real distribution.
+
+\paragraph{7. Real--synthetic mixtures.} When real data are scarce, synthetic data may densify the known part of the support and reduce variance. When sufficiently diverse real data become available, they may re-anchor learning and restore the scaling behaviour associated with real data.
+
+\paragraph{8. Verification.} An imperfect generator may still produce a large absolute number of good samples. If an independent verifier can distinguish useful outputs from incorrect ones, the loop
+\[
+\text{generate} \rightarrow \text{verify} \rightarrow \text{filter} \rightarrow \text{retrain}
+\]
+can outperform the initial generator.
+
+\subsection{Implications for MMALS}
+
+For \MMALS, synthetic data are not limited to generated text or images. The system may generate its own routes, host activations, memory syntheses, and decisions. Those internal traces can become training data for the next version.
+
+The analogue of model collapse is a \emph{functional collapse}:
+
+\begin{itemize}[leftmargin=*]
+  \item a slightly dominant host receives more gradient and replay;
+  \item its routes become more frequent in memory;
+  \item rare hosts receive fewer learning opportunities;
+  \item functional diversity decreases while apparent stability increases;
+  \item the system becomes simple not because it has locally converged, but because it has lost its global alternatives.
+\end{itemize}
+
+The architectural target is therefore:
+\[
+\boxed{\text{local simplicity} + \text{global functional diversity}}
+\]
+
+A simple input should activate few resources. However, inactive routes must remain accessible when a future situation makes them useful. Concentration should result from solving the current problem, not from prematurely deleting the tail of possible routes.
+
+\subsection{Implications for STRAT-Q, probabilistic MTP, and Test Data Governance}
+
+In \STRATQ{} and a probabilistic \MTP{}, a test is a source of evidence. The relevant questions are not limited to ``how many cases were executed?'' They also include:
+
+\begin{itemize}[leftmargin=*]
+  \item Where did the cases come from?
+  \item What is their real/synthetic lineage?
+  \item Which oracle produced the expected result?
+  \item Are they independent of the system being evaluated?
+  \item Are they fresh relative to the current system version and deployment distribution?
+  \item Which rare but decision-relevant risks do they cover?
+  \item Which claim are they capable of supporting?
+\end{itemize}
+
+A Verifiable Credential can establish the issuer, integrity, and status of an assertion. It does not automatically establish truth, representativeness, or evidential strength. It should therefore be complemented by an \emph{Evidence Passport} containing at least lineage, freshness, independence, verification method, tail coverage, and scope of validity.
+
+Residual risk can then be decomposed conceptually as
+\[
+R_{\mathrm{res}} = R_{\mathrm{tested}} + R_{\mathrm{missing}} + R_{\mathrm{oracle}} + R_{\mathrm{drift}}.
+\]
+Synthetic data may reduce $R_{\mathrm{tested}}$ by densifying a known regime. They do not automatically reduce $R_{\mathrm{missing}}$, which represents regimes absent from the generated support.
+
+\subsection{Final message}
+
+The lecture does not condemn synthetic data. It shows that synthetic data must be governed as part of a recursive learning dynamic rather than treated as a simple stock of files.
+
+\begin{keyidea}
+Synthetic data are useful for bootstrapping, densifying, exploring, and proposing. Real data re-anchor the system. Verifiers select. Provenance enables audit. Memory should consolidate only what contributes verifiable novelty and functional gain.
+\end{keyidea}

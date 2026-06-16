@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.0.1 - 2026-06-15
+
+- Released the fully English edition.
+- Replaced the French executive synthesis with a complete English executive summary.
+- Renamed the introductory source file to `01_executive_summary.tex`.
+- Updated PDF metadata, versioning, repository documentation, manifest, and packaged deliverables.
+
 ## 1.0.0 - 2026-06-15
 
 - Added 48-page arXiv-style multilevel lecture analysis.

@@ -1,6 +1,6 @@
-# Synthetic Data in the Age of Scaling
+# Synthetic Data in the Age of Scaling - English Edition
 
-A multilevel analysis of Julia Kempe's public lecture **“Synthetic Data – Friend or Foe in the Age of Scaling?”**, with research orientations for:
+A fully English, multilevel analysis of Julia Kempe's public lecture **“Synthetic Data – Friend or Foe in the Age of Scaling?”**, with research orientations for:
 
 - MMALS and Geometry-MMALS
 - STRAT-Q and probabilistic Master Test Plans
@@ -11,6 +11,10 @@ A multilevel analysis of Julia Kempe's public lecture **“Synthetic Data – Fr
 ## Primary video
 
 https://www.youtube.com/watch?v=D9x3DT16mGg&list=PLx5f8IelFRgHrJ9W6_fbfO3ahDrXMEIWn
+
+## Language
+
+This repository contains the complete English edition of the report and supporting material.
 
 ## Important status
 
