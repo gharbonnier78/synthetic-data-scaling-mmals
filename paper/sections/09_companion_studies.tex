@@ -1,0 +1,89 @@
+\section{Connections to companion studies}
+
+\subsection{Probabilistic machine learning and the MTP}
+
+The companion probabilistic MTP work proposes replacing static qualitative risk labels with posterior distributions, continuous Bayesian updates, and decision analysis. The synthetic-data lecture adds a missing qualification: likelihood terms are only as strong as the data-generating and labeling processes that created them.
+
+A posterior can become overconfident if synthetic or duplicated observations are treated as independent. Hence probabilistic modelling must include data lineage and effective sample size, not only parameter uncertainty.
+
+\subsection{Filtering and machine learning on manifolds}
+
+The companion survey on filtering and machine learning on Riemannian manifolds and Lie groups emphasizes that state variables, covariance matrices, orientations and structured parameters may live on nonlinear spaces rather than ordinary Euclidean vectors \citep{labsir2026filtering}. This matters for the present study in three ways.
+
+\paragraph{Geometric drift.} Recursive synthetic data may contract not only scalar variance but also the occupied region of a manifold. Euclidean averages can hide the loss of modes or violate constraints.
+
+\paragraph{Uncertainty as an SPD object.} Covariance matrices lie on the manifold of symmetric positive definite matrices. Synthetic lineage can change both mean estimates and uncertainty geometry. Comparing covariances with Euclidean subtraction may be misleading.
+
+\paragraph{Dynamic filtering.} Real anchors, synthetic predictions and verifier observations can be treated as sequential measurements of a latent system state. A geometric filter may update that state while respecting constraints.
+
+A conceptual state is
+\[
+X_t\in\mathcal M,
+\]
+with dynamics
+\[
+X_{t+1}=F(X_t,u_t,\eta_t),
+\]
+and evidence
+\[
+Y_t=H(X_t,s_t,\nu_t),
+\]
+where source class $s_t$ affects observation noise. For MMALS, $X_t$ may include host ecology, route geometry, memory covariance, and goal state.
+
+\subsection{Scientific machine learning and structure preservation}
+
+The engineering-AI companion material stresses physics-informed and structure-preserving learning. The synthetic-data result provides a data-side counterpart. Structure can be lost through the training distribution even when the architecture contains the right inductive bias.
+
+A system can therefore fail in two ways:
+
+\begin{enumerate}[leftmargin=*]
+  \item the model class violates physical or geometric constraints;
+  \item the data pipeline removes the regimes needed to identify or preserve those constraints.
+\end{enumerate}
+
+For digital twins and scientific ML, synthetic simulation is especially valuable, but model-form error and calibration to real measurements must be explicit. More simulations of a biased simulator estimate the simulator more precisely, not the physical world.
+
+\subsection{Continual learning}
+
+Model collapse and catastrophic forgetting are related but distinct.
+
+\begin{longtable}{p{0.23\textwidth}p{0.33\textwidth}p{0.34\textwidth}}
+\toprule
+\textbf{Phenomenon} & \textbf{Primary mechanism} & \textbf{Typical intervention} \\
+\midrule
+Catastrophic forgetting & Parameter updates overwrite earlier functions & Replay, regularization, modularity, isolation \\
+Distributional unlearning & Training stream no longer contains skill-supporting cases & Restore or synthesize the missing regimes \\
+Recursive label collapse & Previous predictions become future truth & Independent labels, verifier, lineage weighting \\
+Functional route collapse & Rare hosts/routes lose access and gradient & Causal tail audit, real anchors, dynamic exploration \\
+\bottomrule
+\end{longtable}
+
+MMALS must measure all four separately. Strong retention on previously replayed tasks does not prove preservation of unseen compositional support.
+
+\subsection{Biometric synthetic data}
+
+In biometrics, synthetic images can help when real identity data are scarce or sensitive. However, visual realism is insufficient. A fingerprint or face generator must be evaluated for:
+
+\begin{itemize}[leftmargin=*]
+  \item identity diversity and intra-identity diversity;
+  \item sensor and acquisition-condition coverage;
+  \item biometric quality distributions;
+  \item non-memorization and privacy leakage;
+  \item matcher utility on independent real data;
+  \item long-tail failure modes;
+  \item non-correspondence claims under defined thresholds.
+\end{itemize}
+
+Recursive GAN or diffusion training can amplify mode collapse and generator artefacts. The correct pattern is targeted generation plus independent matcher, simulator, quality, and privacy evaluation. Synthetic data should augment a governed real anchor, not silently replace it.
+
+\subsection{Claim, protocol, and metric verification}
+
+The planned MMALS verifier stack maps directly to the lecture:
+
+\begin{itemize}[leftmargin=*]
+  \item \textbf{Metric evaluator:} computes continuous evidence, not only exact-match success;
+  \item \textbf{Protocol verifier:} checks that the experiment is independent, correctly split, seeded, and comparable;
+  \item \textbf{Claim verifier:} checks whether the measured evidence actually supports the wording of the claim.
+\end{itemize}
+
+Verifier outputs should not become unchallenged truth. Their calibration, false acceptance, false rejection, and domain of validity are first-class evidence.

@@ -1,0 +1,74 @@
+\section{The twelve-year-old chapter: the library of copies}
+
+Imagine a giant library. The library contains common books, rare books, notebooks, maps, strange dictionaries, and a few very important emergency manuals.
+
+A robot reads the library and learns to write new books. Most of its books look good. The robot especially likes common stories because it has seen them many times. It is less good at rare books because it has seen them only once or twice.
+
+Now imagine that a second robot is trained mostly on books written by the first robot.
+
+\subsection{The first problem: rare books disappear}
+
+The first robot writes many common stories and very few rare ones. The second robot therefore sees even fewer rare stories. A third robot sees almost none.
+
+After several generations, the library may still be very large, but it has become less varied.
+
+\begin{keyidea}
+A bigger pile of books is not necessarily a richer library.
+\end{keyidea}
+
+This is the idea of a \emph{long tail}. A small number of things are very common, while a huge number of things are rare. The rare things may include unusual words, difficult mathematical cases, rare machine failures, or a route that only one MMALS host knows how to solve.
+
+\subsection{The second problem: a wrong answer becomes a schoolbook answer}
+
+Suppose a teacher makes a small mistake in a geometry exercise. A student copies the answer. The next year's teacher uses the student's notebook as the official solution. The mistake is now no longer seen as a mistake: it has become the new lesson.
+
+That is what can happen with synthetic labels. The input question may still be real, but the answer used for training comes from an older model.
+
+\subsection{The third problem: being consistent is not the same as being correct}
+
+A robot can become extremely good at copying another robot's style. It may produce very consistent answers. But if the first robot was wrong, the new robot can be precisely wrong.
+
+This is similar to a ruler that is two millimetres too short. Measuring the same object one thousand times gives a very precise answer, but the answer remains biased.
+
+\subsection{How a verifier helps}
+
+Now add a referee who can check each answer.
+
+The robot writes one hundred possible answers. Perhaps only twenty are correct. The referee keeps the correct ones and throws away the others. The next robot trains on the selected answers.
+
+The first robot did not need to be perfect. It only needed to produce enough good candidates, and the referee needed to recognize them.
+
+\[
+\text{many attempts} + \text{reliable checking} \longrightarrow \text{better training data}.
+\]
+
+A calculator can verify arithmetic. A compiler can verify whether code is valid. A physical simulator can check whether a proposed design respects constraints. A human expert can verify a difficult business claim.
+
+\subsection{The MMALS forest}
+
+Think of MMALS as a forest with different host trees. The mycelial network carries information between them. One tree is good at common tasks. Another tree is useful for rare geometric tasks. A third tree helps when memory is needed.
+
+If the forest only replays the routes used by the common tree, the rare trees receive no work. They stop improving and may become useless. The forest looks simpler and calmer, but it has lost abilities.
+
+A healthy forest does not activate every tree for every problem. That would waste energy. It does keep the rare trees alive when they provide a real function.
+
+\begin{mmalsnote}
+The goal is not maximum diversity at every moment. The goal is to use a simple route for a simple problem while preserving the ability to form a more complex route when the problem changes.
+\end{mmalsnote}
+
+\subsection{The test-data lesson}
+
+Imagine testing a bicycle only on a smooth road. You can repeat the test one million times. You will know the smooth-road behaviour very well. You still know almost nothing about ice, mud, broken pavement, or a steep descent.
+
+Synthetic testing is useful when it creates valid versions of those rare roads. It is misleading when it produces one million slightly different smooth roads and calls that complete coverage.
+
+\subsection{The whole story in six sentences}
+
+\begin{enumerate}[leftmargin=*]
+  \item Real data contain common cases and rare cases.
+  \item Generators often reproduce common cases more easily.
+  \item Copies of copies can lose rare cases and repeat old errors.
+  \item More copied data can improve repetition without adding new knowledge.
+  \item Real anchors and independent verifiers can correct the loop.
+  \item A good learning system must remain able to be surprised.
+\end{enumerate}

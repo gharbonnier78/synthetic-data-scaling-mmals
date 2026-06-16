@@ -1,0 +1,241 @@
+\section{The PhD chapter: formal models and asymptotic mechanisms}
+
+\subsection{From empirical scaling to distribution-sensitive scaling}
+
+Empirical neural scaling laws often take the form
+\[
+\mathcal L(N,D,C)
+\approx \mathcal L_\infty
++ a_N N^{-\alpha}
++ a_D D^{-\delta}
++ a_C C^{-\gamma},
+\]
+where $N$ denotes parameters, $D$ data, and $C$ compute. The lecture's central move is to treat the training distribution as an evolving object rather than a fixed background assumption. Let $P_0$ be the natural or human distribution and $P_g$ the distribution available at generation $g$. The learner is then a map
+\[
+\mathcal A:(P_g,T_g,\mathcal M_g)\mapsto f_g,
+\]
+and the generator induces a second map
+\[
+\mathcal G:f_g\mapsto P_{g+1}.
+\]
+Recursive training studies the composite dynamical system
+\[
+P_{g+1}=\mathcal G(\mathcal A(P_g,T_g,\mathcal M_g)).
+\]
+Model collapse is therefore not a single scalar event. It can mean contraction of support, altered tail exponent, increasing bias, increasing variance, worsening calibration, loss of skills, or a changed scaling exponent.
+
+\subsection{The infinite-memory model}
+
+Let inputs $i\in\mathbb N$ follow
+\[
+p_i = \frac{i^{-\beta}}{\zeta(\beta)},\qquad \beta>1,
+\]
+and let labels be deterministic, $y_i=f^\star(i)$. Given $T$ iid samples, the infinite-memory predictor answers correctly if $i$ was observed. Its error is
+\[
+E_T = \sum_{i=1}^{\infty} p_i(1-p_i)^T.
+\]
+For small $p_i$,
+\[
+(1-p_i)^T \approx e^{-Tp_i},
+\]
+so
+\[
+E_T \approx \sum_i p_i e^{-Tp_i}.
+\]
+A threshold analysis sets $Tp_{i^\star}\approx 1$, giving
+\[
+i^\star \asymp T^{1/\beta}.
+\]
+The remaining tail mass is
+\[
+\sum_{i>i^\star} i^{-\beta}
+\asymp \int_{i^\star}^{\infty}x^{-\beta}\,dx
+\asymp (i^\star)^{1-\beta},
+\]
+and therefore
+\[
+E_T\asymp T^{-(\beta-1)/\beta}.
+\]
+The exponent
+\[
+c=1-\frac{1}{\beta}
+\]
+is determined by the tail. The mechanism is occupancy, not rule learning.
+
+\subsection{Chopped tails}
+
+Define a synthetic distribution $Q_k$ with support restricted to $i\le k$. Evaluation remains under $P_0$. The error separates into an in-support occupancy term and missing tail mass:
+\[
+E_{T,k}
+= \sum_{i\le k}p_i\Prob(i\text{ unseen})
++ \sum_{i>k}p_i.
+\]
+Under the same asymptotic approximations,
+\[
+E_{T,k}
+\asymp T^{-(\beta-1)/\beta}
++ k^{-(\beta-1)}.
+\]
+Equivalently, up to constants,
+\[
+E_{T,k}
+\asymp \min(T,k^\beta)^{-(\beta-1)/\beta}.
+\]
+The crossover $T\asymp k^\beta$ separates sample-limited and support-limited regimes. This structure is more informative than the generic statement ``synthetic data are worse'' because it identifies the intervention required in each regime.
+
+\subsection{Narrowed tails}
+
+Suppose the synthetic distribution preserves support but changes the exponent from $\beta$ to $\beta'>\beta$. This is a narrower tail. The learner is now exposed to rare events at a rate governed by $\beta'$, while evaluation may remain governed by $\beta$. Depending on the precise model, one obtains altered learning exponents and crossover behaviour rather than an immediate hard floor \citep{dohmatob2024tails}.
+
+Temperature transformation illustrates the mechanism. If $p_i\propto i^{-\beta}$ and
+\[
+q_i^{(\tau)}\propto p_i^{1/\tau},
+\]
+then
+\[
+q_i^{(\tau)}\propto i^{-\beta/\tau}.
+\]
+For $\tau<1$, $\beta/\tau>\beta$ and the tail is narrowed. Top-$p$ sampling can instead induce an explicit cutoff.
+
+\subsection{Multiple generations}
+
+Let each generation use $T_0$ samples from the preceding synthetic distribution and let the final model use $T$ samples from generation $n$. In the simplified tail model, each arrow introduces another scaling term. A representative expression is
+\[
+E_{\mathrm{test}}^{(n)}(T)
+\asymp T^{-c} + C_n T_0^{-c},
+\]
+with $C_n$ often growing with $n$. If $T_0\asymp T$, then
+\[
+E_{\mathrm{test}}^{(n)}(T)\lesssim nT^{-c}
+\]
+in the corresponding regime. This is not a universal exact law for LLMs; it is a structural warning that each recursive stage can contribute an additional irreducible approximation or sampling term.
+
+For an autoregressive model,
+\[
+q_g(y\mid x)
+=\prod_{t=1}^{L}q_g(y_t\mid x,y_{<t}).
+\]
+An early generated token changes the conditioning history for all later tokens. Recursive generation therefore transforms both local token probabilities and trajectory distributions.
+
+\subsection{Mixing real and synthetic data}
+
+Let
+\[
+T=T_{\Real}+T_{\AI},\qquad
+\pi=\frac{T_{\Real}}{T}.
+\]
+In the simplified chopped-tail setting, when $T_{\Real}\ll k^\beta$,
+\[
+E_{\mathrm{test}}
+\asymp (T_{\Real}+T_{\AI})^{-(1-1/\beta)}
++ k^{-(\beta-1)}.
+\]
+Synthetic data reduce occupancy error but not the missing-support term. Once sufficiently rich real data become available, the asymptotic behaviour can return to
+\[
+E_{\mathrm{test}}
+\asymp T_{\Real}^{-(1-1/\beta)}.
+\]
+This motivates the interpretation of synthetic data as a bootstrap under scarcity rather than a guaranteed asymptotic replacement for real data.
+
+\subsection{Grokking under mixed data}
+
+Suppose synthetic examples encode an easier but biased rule and real examples encode a more general rule. Optimisation can first fit the high-density synthetic structure and only later discover the real rule. The observed curve may show:
+\[
+\text{rapid train fit}
+\rightarrow \text{validation plateau}
+\rightarrow \text{late transition}.
+\]
+This resembles grokking \citep{power2022grokking}. The engineering consequence is that early stopping based on a single aggregate validation metric can terminate before the transition. The research consequence is that late improvement must not be asserted as proof of a specific internal mechanism without representation-level and causal evidence.
+
+\subsection{Kernel ridge regression}
+
+Consider Gaussian design
+\[
+x\sim\mathcal N(0,\Sigma),
+\qquad y=x^\top w_0+\epsilon,
+\qquad \epsilon\sim\mathcal N(0,\sigma_0^2).
+\]
+At generation $g$, ridge regression estimates
+\[
+\widehat w_g
+=\arg\min_w
+\frac{1}{T_g}\|y_g-X_gw\|_2^2
++\lambda_g\|w\|_2^2.
+\]
+The closed form is
+\[
+\widehat w_g
+=\left(X_g^\top X_g+T_g\lambda_g I\right)^{-1}X_g^\top y_g.
+\]
+Synthetic relabeling defines
+\[
+y_{g+1}=X_{g+1}\widehat w_g+\epsilon_{g+1}.
+\]
+Writing $e_g=\widehat w_g-w_0$ yields a recursion of the schematic form
+\[
+e_g=A_ge_{g-1}+b_g+\xi_g,
+\]
+where $A_g$ propagates inherited error, $b_g$ captures systematic regularization bias, and $\xi_g$ captures new sample and label noise. The resulting risk has contributions from clean-data estimation, inherited synthetic bias, and generation-specific variance \citep{dohmatob2024regression}.
+
+The ridge parameter creates a bias--variance trade-off. Small $\lambda$ fits synthetic noise and teacher error; large $\lambda$ shrinks the target excessively. Hence an optimal $\lambda_g^\star$ can depend on generation depth and synthetic noise. Adaptive regularization mitigates some regimes but cannot create information absent from the labels.
+
+\subsection{Strong model collapse}
+
+The later strong-collapse result shows that, in a supervised regression setting, even a small constant synthetic fraction can alter asymptotic behaviour, so that increasing dataset size does not recover the clean scaling law \citep{dohmatob2025strong}. The practical lesson is not that every $1\%$ synthetic mixture is disastrous. It is that a constant synthetic fraction is not asymptotically negligible merely because it is numerically small. Its effect depends on dependence structure, model class, label bias, and scaling regime.
+
+\subsection{Verifier-based selection}
+
+Let a generator produce candidate pairs $(x,\widetilde y)$, with latent correctness $C\in\{0,1\}$. A verifier produces acceptance $A\in\{0,1\}$. Define
+\[
+\phi=\Prob(A=1\mid C=1),
+\qquad
+\psi=\Prob(A=1\mid C=0).
+\]
+The accepted-set correctness is
+\[
+\Prob(C=1\mid A=1)
+=\frac{\phi\Prob(C=1)}{
+\phi\Prob(C=1)+\psi\Prob(C=0)}.
+\]
+Verification is useful when it sufficiently enriches correctness and does not destroy the relevant support. The verifier can be imperfect, but its selective advantage must be measurable \citep{feng2025verification}.
+
+There are two distinct risks:
+
+\begin{enumerate}[leftmargin=*]
+  \item \textbf{False acceptance:} bad examples enter the training set.
+  \item \textbf{Selection bias:} valid but unusual examples are systematically rejected.
+\end{enumerate}
+
+A verifier can therefore prevent label collapse while creating tail collapse. Both precision and support preservation must be evaluated.
+
+\subsection{A general decomposition for recursive synthetic learning}
+
+A useful research abstraction is
+\[
+\begin{aligned}
+E_g ={}& E_{\mathrm{clean}}(T_g,N_g)
++E_{\mathrm{support}}(P_0,P_g)
++E_{\mathrm{label}}(f_{g-1},f^\star)\\
+&+E_{\mathrm{dependence}}(D_g)
++E_{\mathrm{verification}}(V_g)
++E_{\mathrm{shift}}(P_g,P_{\mathrm{deploy}}).
+\end{aligned}
+\]
+Each term suggests a different intervention:
+
+\begin{longtable}{p{0.25\textwidth}p{0.30\textwidth}p{0.35\textwidth}}
+\toprule
+\textbf{Error term} & \textbf{Diagnosis} & \textbf{Intervention} \\
+\midrule
+Clean estimation & Insufficient samples or capacity & More data, capacity, compute, better optimisation \\
+Support & Missing or narrowed regimes & Real anchors, targeted simulation, diversified generation \\
+Label & Biased pseudo-oracle & Independent verification, relabeling, uncertainty weighting \\
+Dependence & Duplicates and correlated ancestry & Lineage-aware effective sample size \\
+Verification & Weak or biased filter & Calibrate verifier, stratify acceptance, preserve tails \\
+Shift & Training/deployment mismatch & Fresh data, monitoring, recalibration \\
+\bottomrule
+\end{longtable}
+
+\begin{keyidea}
+The phrase ``model collapse'' should be replaced, whenever possible, by a specific diagnosis: support contraction, recursive label bias, dependence inflation, verifier selection bias, or deployment shift.
+\end{keyidea}

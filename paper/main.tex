@@ -1,0 +1,123 @@
+\documentclass[11pt]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[a4paper,margin=2.35cm]{geometry}
+\usepackage{microtype}
+\usepackage{amsmath,amssymb,amsfonts,mathtools}
+\usepackage{graphicx}
+\usepackage{booktabs,tabularx,longtable,array,multirow}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage[nameinlink,noabbrev]{cleveref}
+\usepackage{natbib}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{float}
+\usepackage{listings}
+\usepackage{url}
+
+\definecolor{deepblue}{RGB}{30,70,110}
+\definecolor{softgray}{RGB}{245,246,248}
+\definecolor{deepred}{RGB}{145,45,45}
+\definecolor{deepgreen}{RGB}{35,105,75}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=deepblue,
+  citecolor=deepgreen,
+  urlcolor=deepred,
+  pdftitle={Synthetic Data in the Age of Scaling},
+  pdfauthor={Guillaume Harbonnier},
+  pdfsubject={Video analysis and research orientation for MMALS, STRAT-Q and probabilistic test governance}
+}
+
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{Synthetic Data in the Age of Scaling}
+\rhead{Video Analysis and Research Orientation}
+\cfoot{\thepage}
+\setlength{\headheight}{14pt}
+\onehalfspacing
+\setcounter{tocdepth}{2}
+\setcounter{secnumdepth}{3}
+
+\newcommand{\MMALS}{\textsc{MMALS}}
+\newcommand{\STRATQ}{\textsc{STRAT-Q}}
+\newcommand{\MTP}{\textsc{MTP}}
+\newcommand{\Real}{\mathrm{real}}
+\newcommand{\AI}{\mathrm{AI}}
+\newcommand{\Syn}{\mathrm{syn}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Prob}{\mathbb{P}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\ind}{\mathbf{1}}
+
+\newenvironment{keyidea}{%
+  \begin{center}\begin{minipage}{0.93\textwidth}\color{deepblue}\rule{\linewidth}{0.5pt}\par\vspace{0.3em}\noindent\textbf{Key idea.} }%
+  {\par\vspace{0.3em}\rule{\linewidth}{0.5pt}\end{minipage}\end{center}}
+
+\newenvironment{mmalsnote}{%
+  \begin{center}\begin{minipage}{0.93\textwidth}\color{deepgreen}\rule{\linewidth}{0.5pt}\par\vspace{0.3em}\noindent\textbf{MMALS orientation.} }%
+  {\par\vspace{0.3em}\rule{\linewidth}{0.5pt}\end{minipage}\end{center}}
+
+\newenvironment{cautionbox}{%
+  \begin{center}\begin{minipage}{0.93\textwidth}\color{deepred}\rule{\linewidth}{0.5pt}\par\vspace{0.3em}\noindent\textbf{Caution.} }%
+  {\par\vspace{0.3em}\rule{\linewidth}{0.5pt}\end{minipage}\end{center}}
+
+\title{\textbf{Synthetic Data in the Age of Scaling}\\
+\large A Multilevel Video Analysis and Research Orientation for MMALS, STRAT-Q, Probabilistic Test Governance, and Geometric Learning}
+\author{Guillaume Harbonnier\\
+\small Independent research note -- MMALS / STRAT-Q programme}
+\date{Version 1.0 -- 15 June 2026}
+
+\begin{document}
+\maketitle
+
+\begin{center}
+\begin{minipage}{0.88\textwidth}
+\small
+\textbf{Status and provenance.} This document is an independent analytical study of Julia Kempe's public lecture \emph{Synthetic Data -- Friend or Foe in the Age of Scaling?}, delivered in the IHES/CNRS \emph{Mathematics for and by Large Language Models} series. It is not a transcript, not an official summary, and not endorsed by the speaker, IHES, NYU, or Meta. It synthesizes the lecture themes, the cited research papers, and an extended technical discussion connecting them to MMALS, STRAT-Q, probabilistic MTP, Test Data Governance, verifiable evidence, continual learning, and geometric filtering.
+
+\vspace{0.8em}
+\textbf{Primary video.} \url{https://www.youtube.com/watch?v=D9x3DT16mGg&list=PLx5f8IelFRgHrJ9W6_fbfO3ahDrXMEIWn}
+\end{minipage}
+\end{center}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=2.6cm]{figures/video_qr.png}
+\caption*{QR code to the public video and playlist.}
+\end{figure}
+
+\begin{abstract}
+The rapid proliferation of AI-generated content changes the assumptions under which neural scaling laws were originally observed. A training corpus is no longer only a sample from human or natural data: it may contain outputs of previous models, pseudo-labels, filtered generations, and recursively transformed evidence. This report develops a multilevel explanation of that transition. A first track is written for a twelve-year-old reader, a second for engineers, and a third for graduate and PhD-level readers. We explain power-law scaling, Zipf distributions, perplexity, the Hutter infinite-memory model, tail cutting and tail narrowing, recursive relabeling, modified scaling laws, grokking under mixed real and synthetic data, kernel ridge analyses of model collapse, and verifier-based synthetic-data bootstrapping. We then translate these results into concrete research orientations for MMALS, where the analogous risk is a functional collapse of hosts, routes, memories, and collaborations; for STRAT-Q and probabilistic Master Test Plans, where evidence volume must be separated from evidence strength; and for Test Data Governance, where lineage, freshness, independence, verification, and tail coverage must accompany every synthetic artifact. The central conclusion is that synthetic data can be useful, especially under data scarcity, but scale alone is insufficient. The relevant object to grow is verified functional support rather than raw sample count.
+\end{abstract}
+
+\tableofcontents
+\newpage
+
+\input{sections/01_french_summary}
+\input{sections/02_source_audience}
+\input{sections/03_twelve_year_old}
+\input{sections/04_engineer}
+\input{sections/05_phd}
+\input{sections/06_julia_environment}
+\input{sections/07_mmalsa_orientation}
+\input{sections/08_stratq_governance}
+\input{sections/09_companion_studies}
+\input{sections/10_experimental_program}
+\input{sections/11_conclusion}
+\appendix
+\input{sections/A_notation}
+\input{sections/B_claim_matrix}
+\input{sections/C_reproducibility}
+
+\bibliographystyle{plainnat}
+\bibliography{references}
+
+\end{document}

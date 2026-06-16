@@ -1,0 +1,33 @@
+\section{Conclusion: beyond raw scaling}
+
+Julia Kempe's lecture presents a sobering but constructive view of the synthetic-data age. Scaling laws were observed under assumptions about data distributions that recursive model-generated corpora can violate. The consequences include altered exponents, error floors, lost skills, recursive label bias, delayed recovery, and verifier-dependent phase transitions.
+
+The lecture does not imply that synthetic data should be rejected. It establishes a more precise doctrine:
+
+\begin{enumerate}[leftmargin=*]
+  \item synthetic data are most useful when real data are scarce or when they target otherwise inaccessible regimes;
+  \item synthetic volume cannot recover support that the generator never produces;
+  \item recursive pseudo-labels require independent corrective signals;
+  \item real data, accumulation, and verification can change the asymptotic outcome;
+  \item data curation becomes part of model architecture and risk governance.
+\end{enumerate}
+
+For MMALS, the deepest translation is that an adaptive system must preserve the conditions of future surprise. A route should not become dominant merely because it generated most of the replay. A memory should not become true because several system generations repeated it. A rare host should not be maintained for diversity theatre, but neither should it disappear before its causal value is tested.
+
+The target architecture is therefore:
+\[
+\boxed{
+\text{local simplicity}
++\text{global functional diversity}
++\text{independent verification}
++\text{lineage-aware memory}
+}
+\]
+
+For STRAT-Q and probabilistic MTP, evidence must be discounted by dependence, lineage, freshness, oracle uncertainty, and missing-tail risk. The number of tests is not the number of independent proofs. A cryptographically verifiable credential is an authenticity layer, not an epistemic conclusion.
+
+For engineering and scientific machine learning, simulation and generation remain powerful. Their role is to propose, explore, densify, and stress. Real measurements and validated constraints remain necessary to correct model-form error.
+
+\begin{keyidea}
+The next era is not literally ``beyond scaling'' in the sense that scale no longer matters. It is beyond the belief that scale is sufficient. What must scale is verified, diverse, fresh, decision-relevant functional support.
+\end{keyidea}

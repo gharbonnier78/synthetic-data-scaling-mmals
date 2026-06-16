@@ -1,0 +1,17 @@
+cff-version: 1.2.0
+title: "Synthetic Data in the Age of Scaling: A Multilevel Video Analysis and Research Orientation"
+message: "Please cite this independent research note and the original lecture/papers separately."
+type: report
+authors:
+  - family-names: Harbonnier
+    given-names: Guillaume
+version: 1.0.0
+date-released: 2026-06-15
+url: "https://github.com/gharbonnier78/synthetic-data-scaling-mmalls"
+preferred-citation:
+  type: report
+  title: "Synthetic Data in the Age of Scaling: A Multilevel Video Analysis and Research Orientation for MMALS, STRAT-Q, Probabilistic Test Governance, and Geometric Learning"
+  authors:
+    - family-names: Harbonnier
+      given-names: Guillaume
+  year: 2026

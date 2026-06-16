@@ -1,0 +1,107 @@
+\section{Résumé exécutif en français}
+
+\subsection{Pourquoi cette conférence est importante}
+
+La conférence de Julia Kempe pose une question devenue structurelle : que deviennent les lois d'échelle lorsque les données utilisées pour entraîner les modèles ne proviennent plus seulement d'humains, de capteurs ou de phénomènes naturels, mais aussi des modèles précédents ? Les lois d'échelle classiques suggèrent qu'en augmentant convenablement les paramètres, les données et le calcul, la perte diminue selon une loi de puissance. Cette lecture a fortement influencé la stratégie industrielle des grands modèles. Or la donnée synthétique modifie la distribution d'apprentissage elle-même.
+
+Le risque central n'est pas seulement une augmentation du taux d'erreur. Il est plus subtil :
+
+\begin{itemize}[leftmargin=*]
+  \item la longue traîne des cas rares peut être coupée ou rétrécie ;
+  \item certaines compétences peuvent ne plus recevoir les exemples nécessaires à leur maintien ;
+  \item des pseudo-labels légèrement biaisés peuvent devenir la vérité de la génération suivante ;
+  \item davantage de données peut alors améliorer la précision sur une distribution déjà appauvrie, sans rapprocher le système du réel ;
+  \item le mélange de réel et de synthétique peut provoquer des plateaux, puis parfois une généralisation tardive de type \emph{grokking} ;
+  \item la vérification indépendante peut transformer une grande quantité de candidats imparfaits en un dataset réellement utile.
+\end{itemize}
+
+\begin{keyidea}
+Le volume brut ne mesure pas l'information nouvelle. Un million de répétitions corrélées ne vaut pas un million d'observations indépendantes. La grandeur importante devient le \emph{support fonctionnel vérifié} : la partie de la réalité ou des compétences qui reste accessible, représentée et contrôlée.
+\end{keyidea}
+
+\subsection{La chaîne conceptuelle de la conférence}
+
+La conférence construit progressivement une démonstration.
+
+\paragraph{1. Scaling laws.} Une erreur peut décroître comme
+\[
+E(T,d) \approx \left(\frac{T_c}{T}\right)^a + \left(\frac{d_c}{d}\right)^b,
+\]
+où $T$ est la quantité de données et $d$ la taille du modèle. Une ressource insuffisante devient un goulot d'étranglement.
+
+\paragraph{2. Compétences émergentes.} Certaines performances semblent apparaître brutalement avec l'échelle. Il faut cependant distinguer une vraie transition interne, un seuil statistique et un artefact de métrique discontinue.
+
+\paragraph{3. Distributions à longue traîne.} Le langage suit approximativement une loi de Zipf : quelques éléments sont fréquents, beaucoup sont rares. La difficulté, mesurée par exemple par la perplexité, est elle aussi très asymétrique.
+
+\paragraph{4. Modèle de Hutter.} Un système à mémoire infinie qui ne généralise pas peut déjà produire une loi d'échelle. Il répond correctement si une entrée a déjà été observée et s'abstient sinon. Pour $p(i)\propto i^{-\beta}$, son erreur suit
+\[
+E_T \asymp T^{-(1-1/\beta)}.
+\]
+Une belle courbe de scaling ne prouve donc ni raisonnement ni abstraction.
+
+\paragraph{5. Coupure de traîne.} Si un générateur synthétique ne produit que les événements jusqu'au rang $k$, l'erreur devient
+\[
+E_{\mathrm{test}} \asymp T^{-(\beta-1)/\beta} + k^{-(\beta-1)}.
+\]
+Le premier terme diminue avec les données ; le second est un plancher lié aux cas absents.
+
+\paragraph{6. Récursion.} Chaque génération synthétique ajoute son propre échantillonnage, son erreur d'approximation et éventuellement son bruit de label. Une suite de modèles peut devenir de plus en plus cohérente avec ses prédécesseurs et de moins en moins juste par rapport à la réalité.
+
+\paragraph{7. Mélange réel/synthétique.} Lorsque le réel est rare, le synthétique peut densifier la partie connue et réduire la variance. Lorsque suffisamment de données réelles diverses apparaissent, elles peuvent réancrer l'apprentissage et restaurer la loi de scaling réelle.
+
+\paragraph{8. Vérification.} Un générateur imparfait peut produire une grande quantité absolue de bons exemples. Si un vérificateur indépendant sait distinguer les bons des mauvais, la boucle
+\[
+\text{générer} \rightarrow \text{vérifier} \rightarrow \text{filtrer} \rightarrow \text{réentraîner}
+\]
+peut dépasser les performances du générateur initial.
+
+\subsection{Conséquence pour MMALS}
+
+Pour \MMALS, la donnée synthétique n'est pas seulement du texte ou des images. Le système peut produire ses propres routes, activations d'hôtes, synthèses mémorielles et décisions. Ces traces internes deviennent potentiellement les données de la génération suivante.
+
+Le risque analogue au model collapse est un \emph{collapse fonctionnel} :
+
+\begin{itemize}[leftmargin=*]
+  \item un hôte légèrement dominant reçoit davantage de gradient et de replay ;
+  \item ses routes deviennent plus fréquentes dans la mémoire ;
+  \item les hôtes rares reçoivent moins d'expériences ;
+  \item la diversité fonctionnelle diminue alors que la stabilité apparente augmente ;
+  \item le système devient simple non parce qu'il a convergé localement, mais parce qu'il a perdu ses alternatives globales.
+\end{itemize}
+
+L'objectif architectural retenu est donc :
+\[
+\boxed{\text{simplicité locale} + \text{diversité fonctionnelle globale}}
+\]
+
+Un cas simple doit activer peu de ressources. Mais les routes non utilisées doivent rester accessibles si une situation future les rend utiles. La concentration doit résulter de la résolution du problème, pas d'une suppression prématurée de la traîne des routes.
+
+\subsection{Conséquence pour STRAT-Q, MTP et Test Data Governance}
+
+Dans \STRATQ{} et le \MTP{} probabiliste, un test est une source d'évidence. La question n'est donc pas seulement : « combien de cas avons-nous exécutés ? », mais :
+
+\begin{itemize}[leftmargin=*]
+  \item d'où proviennent-ils ?
+  \item quelle est leur lignée réelle/synthétique ?
+  \item quel oracle fournit le résultat attendu ?
+  \item sont-ils indépendants du système évalué ?
+  \item sont-ils frais par rapport à la version actuelle ?
+  \item quels risques rares couvrent-ils ?
+  \item pour quelle claim sont-ils pertinents ?
+\end{itemize}
+
+Une Verifiable Credential peut prouver l'émetteur, l'intégrité et le statut d'une déclaration. Elle ne prouve pas automatiquement la vérité, la représentativité ou la force probatoire de cette déclaration. Il faut donc lui associer un \emph{Evidence Passport} contenant au minimum : lignée, fraîcheur, indépendance, vérification, couverture de traîne et périmètre de validité.
+
+Le risque résiduel peut alors être décomposé conceptuellement :
+\[
+R_{\mathrm{res}} = R_{\mathrm{tested}} + R_{\mathrm{missing}} + R_{\mathrm{oracle}} + R_{\mathrm{drift}}.
+\]
+Le synthétique peut réduire $R_{\mathrm{tested}}$ en densifiant un régime. Il ne réduit pas automatiquement $R_{\mathrm{missing}}$, qui correspond aux régimes absents.
+
+\subsection{Message final}
+
+Cette conférence ne condamne pas la donnée synthétique. Elle montre qu'elle doit être gouvernée comme une dynamique récursive et non comme un simple stock de fichiers.
+
+\begin{keyidea}
+Le synthétique est utile pour démarrer, densifier, explorer et proposer. Le réel réancre. Le vérificateur sélectionne. La provenance permet d'auditer. La mémoire ne doit consolider que ce qui apporte une nouveauté et un gain vérifiables.
+\end{keyidea}
